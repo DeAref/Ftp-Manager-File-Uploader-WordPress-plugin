@@ -1,10 +1,13 @@
 # FTP Manager & Uploader 
-Contributors: Aref solaimani & Mahdi mortazavi
-Tags: ftp, uploader, file manager, ftp manager, file browser, url uploader
-Requires at least: 5.0
-Tested up to: 6.9
-Stable tag: 1.7.0
-License: GPLv2 or later
+
+<img width="600"  alt="Screenshot 1404-10-10 at 1 51 16 PM" src="https://github.com/user-attachments/assets/35b5670b-84eb-4f58-a25c-a13f0f14f4e3" />
+
+- Contributors: Aref solaimani & Mahdi mortazavi
+- Tags: ftp, uploader, file manager, ftp manager, file browser, url uploader
+- Requires at least: 5.0
+- Tested up to: 6.9
+- Stable tag: 1.7.0
+- License: GPLv2 or later
 
 Complete FTP management solution with background uploads from URL and device, plus full file manager capabilities.
 
@@ -13,6 +16,7 @@ Complete FTP management solution with background uploads from URL and device, pl
 FTP Manager & Uploader is a comprehensive WordPress plugin that provides a complete FTP management solution. Upload files from URLs or directly from your device, and manage your entire FTP server structure through an intuitive file manager interface—all from your WordPress admin panel.
 
 **Key Features:**
+<img width="1364" height="744" alt="Screenshot 1404-10-10 at 1 53 52 PM" src="https://github.com/user-attachments/assets/052d9615-eab0-490d-9bc5-7deb01fa3994" />
 
 *   **Dual Upload Methods:**
     *   Upload from URL: Transfer files directly from any public URL to your FTP server
@@ -123,4 +127,5 @@ Yes! Both upload methods support selecting a destination folder. The plugin will
 
 = 1.0.0 =
 *   Initial release with URL upload functionality
+
 
