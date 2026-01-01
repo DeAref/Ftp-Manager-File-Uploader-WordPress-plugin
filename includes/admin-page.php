@@ -1725,6 +1725,39 @@ function ftp_uploader_get_connection()
 }
 
 /**
+ * Sanitize Path to prevent Traversal
+ */
+function ftp_uploader_sanitize_path($base_path, $user_path)
+{
+    // Remove null bytes
+    $user_path = str_replace("\0", '', $user_path);
+
+    // Normalize slashes
+    $user_path = str_replace('\\', '/', $user_path);
+
+    // Split into segments
+    $segments = explode('/', $user_path);
+    $clean_segments = array();
+
+    foreach ($segments as $segment) {
+        if ($segment === '..' || $segment === '.' || $segment === '') {
+            continue;
+        }
+        $clean_segments[] = $segment;
+    }
+
+    $clean_path = implode('/', $clean_segments);
+
+    $base_path = rtrim($base_path, '/');
+
+    if (empty($clean_path)) {
+        return $base_path;
+    }
+
+    return $base_path . '/' . $clean_path;
+}
+
+/**
  * AJAX Handler: List Files and Directories
  */
 function ftp_uploader_ajax_list_files()
@@ -1740,7 +1773,7 @@ function ftp_uploader_ajax_list_files()
     $base_path = isset($options['remote_path']) ? trailingslashit($options['remote_path']) : '/';
 
     // Combine base path with current path
-    $full_path = rtrim($base_path . ltrim($current_path, '/'), '/');
+    $full_path = ftp_uploader_sanitize_path($base_path, $current_path);
     if (empty($full_path)) {
         $full_path = '/';
     }
@@ -1867,7 +1900,7 @@ function ftp_uploader_ajax_get_folders()
             return; // Limit recursion depth
         }
 
-        $full_path = rtrim($base_path . ltrim($current_path, '/'), '/');
+        $full_path = ftp_uploader_sanitize_path($base_path, $current_path);
         if (empty($full_path)) {
             $full_path = '/';
         }
@@ -1976,7 +2009,7 @@ function ftp_uploader_ajax_create_directory()
     $options = get_option('ftp_uploader_settings');
     $base_path = isset($options['remote_path']) ? trailingslashit($options['remote_path']) : '/';
 
-    $full_path = rtrim($base_path . ltrim($current_path, '/'), '/');
+    $full_path = ftp_uploader_sanitize_path($base_path, $current_path);
     if (empty($full_path)) {
         $full_path = '/';
     }
@@ -2027,7 +2060,7 @@ function ftp_uploader_ajax_delete_file()
     $options = get_option('ftp_uploader_settings');
     $base_path = isset($options['remote_path']) ? trailingslashit($options['remote_path']) : '/';
 
-    $full_path = rtrim($base_path . ltrim($file_path, '/'), '/');
+    $full_path = ftp_uploader_sanitize_path($base_path, $file_path);
 
     $conn_id = ftp_uploader_get_connection();
     if (!$conn_id) {
@@ -2065,7 +2098,7 @@ function ftp_uploader_ajax_delete_directory()
     $options = get_option('ftp_uploader_settings');
     $base_path = isset($options['remote_path']) ? trailingslashit($options['remote_path']) : '/';
 
-    $full_path = rtrim($base_path . ltrim($dir_path, '/'), '/');
+    $full_path = ftp_uploader_sanitize_path($base_path, $dir_path);
 
     $conn_id = ftp_uploader_get_connection();
     if (!$conn_id) {
@@ -2159,8 +2192,11 @@ function ftp_uploader_ajax_move_item()
     $options = get_option('ftp_uploader_settings');
     $base_path = isset($options['remote_path']) ? trailingslashit($options['remote_path']) : '/';
 
-    $full_source = rtrim($base_path . ltrim($source_path, '/'), '/');
-    $full_destination = rtrim($base_path . ltrim($destination_path, '/'), '/');
+    // Increase time limit for move operations
+    @set_time_limit(0);
+
+    $full_source = ftp_uploader_sanitize_path($base_path, $source_path);
+    $full_destination = ftp_uploader_sanitize_path($base_path, $destination_path);
 
     $conn_id = ftp_uploader_get_connection();
     if (!$conn_id) {
@@ -2334,8 +2370,11 @@ function ftp_uploader_ajax_copy_item()
     $options = get_option('ftp_uploader_settings');
     $base_path = isset($options['remote_path']) ? trailingslashit($options['remote_path']) : '/';
 
-    $full_source = rtrim($base_path . ltrim($source_path, '/'), '/');
-    $full_destination = rtrim($base_path . ltrim($destination_path, '/'), '/');
+    // Increase time limit for copy operations
+    @set_time_limit(0);
+
+    $full_source = ftp_uploader_sanitize_path($base_path, $source_path);
+    $full_destination = ftp_uploader_sanitize_path($base_path, $destination_path);
 
     $conn_id = ftp_uploader_get_connection();
     if (!$conn_id) {
