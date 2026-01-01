@@ -1,4 +1,4 @@
-# 🚀 FTP Manager & Uploader 💎
+# 🚀 FTP Manager & Uploader Wordpress Plugin 💎
 
 ![Banner](./banner.png)
 
@@ -111,5 +111,6 @@ Whether you're migrating large files from a remote server via URL or uploading a
 
 *Developed by Aref Solaimani & Mahdi Mortazavi*  
 *Built for the community with ❤️*
+
 
 
